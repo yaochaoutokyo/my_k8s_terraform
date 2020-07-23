@@ -38,13 +38,14 @@ resource "aws_instance" "master-node" {
   key_name = aws_key_pair.key.key_name
   security_groups = [aws_security_group.kubernetes-sg.id]
   private_ip = "10.0.1.1${count.index}"
+  associate_public_ip_address = true
   subnet_id = aws_subnet.public-subnet.id
 
   user_data = "name=contoller-${count.index}"
 
   tags = {
     Terraform = "true"
-    Name = "kubernetes-master-${count.index}"
+    Name = "controller-${count.index}"
   }
 }
 
@@ -57,11 +58,12 @@ resource "aws_instance" "worker-node" {
   security_groups = [aws_security_group.kubernetes-sg.id]
   private_ip = "10.0.1.2${count.index}"
   subnet_id = aws_subnet.public-subnet.id
+  associate_public_ip_address = true
 
   user_data = "name=worker-${count.index}|pod-cidr=10.200.${count.index}.0/24"
 
   tags = {
     Terraform = "true"
-    Name = "kubernetes-worker-${count.index}"
+    Name = "worker-${count.index}"
   }
 }
