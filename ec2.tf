@@ -37,7 +37,7 @@ resource "aws_instance" "master-node" {
   instance_type = "t3.micro"
   key_name = aws_key_pair.key.key_name
   security_groups = [aws_security_group.kubernetes-sg.id]
-  private_ip = "10.0.0.1${count.index}"
+  private_ip = "10.0.1.1${count.index}"
   subnet_id = aws_subnet.public-subnet.id
 
   user_data = "name=contoller-${count.index}"
@@ -55,7 +55,7 @@ resource "aws_instance" "worker-node" {
   instance_type = "t3.micro"
   key_name = aws_key_pair.key.key_name
   security_groups = [aws_security_group.kubernetes-sg.id]
-  private_ip = "10.0.0.2${count.index}"
+  private_ip = "10.0.1.2${count.index}"
   subnet_id = aws_subnet.public-subnet.id
 
   user_data = "name=worker-${count.index}|pod-cidr=10.200.${count.index}.0/24"

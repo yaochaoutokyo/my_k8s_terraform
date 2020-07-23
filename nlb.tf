@@ -15,9 +15,14 @@ resource "aws_lb" "kubernetes-nlb" {
 resource "aws_lb_target_group" "kubernetes-tg" {
   name     = "kubernetes-tg"
   port     = 6443
-  protocol = "HTTP"
+  protocol = "TCP"
   target_type = "ip"
   vpc_id   = aws_vpc.kubernetes-vpc.id
+  # Network Load Balancers do not support Stickiness
+  stickiness {
+    type = "lb_cookie"
+    enabled = false
+  }
 
   tags = {
     Terraform = "true"
@@ -30,7 +35,7 @@ resource "aws_lb_target_group_attachment" "tg-attachment" {
   count = 3
   target_group_arn = aws_lb_target_group.kubernetes-tg.arn
   target_id        = "10.0.1.1${count.index}"
-  port             = 80
+  port             = 6443
 }
 
 resource "aws_lb_listener" "nlb-listener" {
