@@ -22,7 +22,7 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_key_pair" "key" {
   key_name   = "kubernetes-key"
-  public_key = file("keys/key.pub")
+  public_key = file("kubernetes.pub")
 
   tags = {
     Terraform = "true"
@@ -44,7 +44,7 @@ resource "aws_instance" "master-node" {
 
   tags = {
     Terraform = "true"
-    Name = "kubernetes-master-${count-index}"
+    Name = "kubernetes-master-${count.index}"
   }
 }
 
