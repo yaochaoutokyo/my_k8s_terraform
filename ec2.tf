@@ -41,7 +41,7 @@ resource "aws_instance" "master-node" {
   associate_public_ip_address = true
   subnet_id = aws_subnet.public-subnet.id
 
-  user_data = "name=contoller-${count.index}"
+  user_data = "name=controller-${count.index}"
 
   tags = {
     Terraform = "true"
